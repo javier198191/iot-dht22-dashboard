@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IoT Sensor — Login</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 40px;
+      width: 380px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo .icon { font-size: 3rem; }
+    .logo h1 { font-size: 1.5rem; font-weight: 700; margin-top: 8px; }
+    .logo p { color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 4px; }
+
+    .tabs {
+      display: flex;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.95rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .form-section { display: none; }
+    .form-section.active { display: block; }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.3s;
+    }
+    .input-group input:focus {
+      border-color: #667eea;
+      background: rgba(102,126,234,0.1);
+    }
+    .input-group input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.3s, transform 0.1s;
+      margin-top: 6px;
+    }
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:active { transform: scale(0.98); }
+
+    .alert {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .alert.error { background: rgba(255,80,80,0.2); border: 1px solid rgba(255,80,80,0.4); color: #ff9999; }
+    .alert.success { background: rgba(80,200,120,0.2); border: 1px solid rgba(80,200,120,0.4); color: #90f0b0; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="icon">🌡️</div>
+    <h1>IoT Dashboard</h1>
+    <p>ESP8266 + DHT22 Monitor</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('login')">Iniciar sesión</button>
+    <button class="tab-btn" onclick="switchTab('signup')">Registrarse</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="form-section active" id="loginSection">
+    <div class="alert error" id="loginError"></div>
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="correo@ejemplo.com" />
+    </div>
+    <div class="input-group">
+      <label>Contraseña</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" />
+    </div>
+    <button class="btn-submit" onclick="login()">Entrar</button>
+  </div>
+
+  <!-- SIGNUP -->
+  <div class="form-section" id="signupSection">
+    <div class="alert error" id="signupError"></div>
+    <div class="alert success" id="signupSuccess"></div>
+    <div class="input-group">
+      <label>Usuario</label>
+      <input type="text" id="signupUsername" placeholder="tu_usuario" />
+    </div>
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" id="signupEmail" placeholder="correo@ejemplo.com" />
+    </div>
+    <div class="input-group">
+      <label>Contraseña</label>
+      <input type="password" id="signupPassword" placeholder="Mínimo 6 caracteres" />
+    </div>
+    <button class="btn-submit" onclick="signup()">Crear cuenta</button>
+  </div>
+</div>
+
+<script>
+  if (localStorage.getItem('token')) window.location.href = '/dashboard';
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup'));
+    });
+    document.getElementById('loginSection').classList.toggle('active', tab === 'login');
+    document.getElementById('signupSection').classList.toggle('active', tab === 'signup');
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 4000);
+  }
+  function showSuccess(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  async function login() {
+    const email    = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) return showError('loginError', 'Completa todos los campos');
+
+    try {
+      const res  = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return showError('loginError', data.message);
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('username', data.username);
+      window.location.href = '/dashboard';
+    } catch {
+      showError('loginError', 'Error de conexión con el servidor');
+    }
+  }
+
+  async function signup() {
+    const username = document.getElementById('signupUsername').value.trim();
+    const email    = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+    if (!username || !email || !password) return showError('signupError', 'Completa todos los campos');
+    if (password.length < 6) return showError('signupError', 'La contraseña debe tener al menos 6 caracteres');
+
+    try {
+      const res  = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return showError('signupError', data.message);
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('username', data.username);
+      window.location.href = '/dashboard';
+    } catch {
+      showError('signupError', 'Error de conexión con el servidor');
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('loginSection').classList.contains('active')) login();
+      else signup();
+    }
+  });
+</script>
+</body>
+</html>

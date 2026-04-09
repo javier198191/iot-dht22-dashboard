@@ -1,0 +1,12 @@
+# Dependencias (esta carpeta pesa mucho y se genera con npm install)
+node_modules/
+
+# Variables de entorno (¡AQUÍ ESTÁ TU CONTRASEÑA DE MONGO! No la subas)
+.env
+
+# Archivos de sistema y logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
