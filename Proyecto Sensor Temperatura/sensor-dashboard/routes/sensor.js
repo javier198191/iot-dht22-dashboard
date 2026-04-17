@@ -59,6 +59,8 @@ router.post('/led', authMiddleware, (req, res) => {
   res.json({ message: `LED ${ledStatus ? 'encendido' : 'apagado'}`, status: ledStatus });
 });
 
+let ledStatus = 0;
+
 // Consultar estado del LED desde el ESP8266
 router.get('/led-status', (req, res) => {
   res.json({ status: ledStatus });
