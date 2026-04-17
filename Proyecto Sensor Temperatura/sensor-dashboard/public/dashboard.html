@@ -1,7 +1,9 @@
 <div class="stat-card">
   <div class="label">Control de Dispositivo</div>
-  <div class="value" id="ledStatusLabel" style="font-size: 1.2rem; margin-bottom: 10px; color: #8b949e;">LED APAGADO</div>
-  <button id="ledBtn" class="btn-logout" onclick="toggleLED()" style="width:100%; border-color: #58a6ff; color: #58a6ff;">
+  <div class="value" id="ledStatusLabel" style="font-size: 1.2rem; margin-bottom: 10px; color: #8b949e;">LED APAGADO
+  </div>
+  <button id="ledBtn" class="btn-logout" onclick="toggleLED()"
+    style="width:100%; border-color: #58a6ff; color: #58a6ff;">
     ENCENDER LED
   </button>
 </div>
@@ -14,13 +16,13 @@
     try {
       const res = await fetch('/api/sensor/led', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}` 
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ status: currentLedState })
       });
-      
+
       if (res.ok) {
         const btn = document.getElementById('ledBtn');
         const label = document.getElementById('ledStatusLabel');
