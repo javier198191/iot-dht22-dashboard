@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-let ledStatus = 0; // Estado global del LED (0 apagado, 1 encendido)
+let ledStatus = 0; // Estado global del LED (Declarado solo una vez)
 
 const apiKeyAuth = (req, res, next) => {
   if (req.headers['x-api-key'] !== process.env.API_KEY)
@@ -35,7 +35,7 @@ router.post('/data', apiKeyAuth, async (req, res) => {
     if (temperature > 30 || humidity > 70) {
       const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: 'tu-correo@ejemplo.com', // Puedes dinamizar esto con el email del usuario logueado
+        to: 'tu-correo@ejemplo.com', // Cambia esto por tu email real
         subject: '⚠️ ALERTA: Niveles Críticos detectados',
         text: `Se han detectado niveles altos en el sensor.\n\nTemperatura: ${temperature}°C\nHumedad: ${humidity}%\nFecha: ${new Date().toLocaleString()}`
       };
@@ -59,14 +59,12 @@ router.post('/led', authMiddleware, (req, res) => {
   res.json({ message: `LED ${ledStatus ? 'encendido' : 'apagado'}`, status: ledStatus });
 });
 
-let ledStatus = 0;
-
 // Consultar estado del LED desde el ESP8266
 router.get('/led-status', (req, res) => {
   res.json({ status: ledStatus });
 });
 
-// Los demás endpoints (latest, history, stats) se mantienen igual...
+// Endpoints adicionales
 router.get('/latest', authMiddleware, async (req, res) => {
   try {
     const latest = await SensorData.findOne().sort({ timestamp: -1 });
