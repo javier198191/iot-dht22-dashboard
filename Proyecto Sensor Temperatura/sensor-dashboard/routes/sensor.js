@@ -35,7 +35,7 @@ router.post('/data', apiKeyAuth, async (req, res) => {
     if (temperature > 30 || humidity > 70) {
       const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: 'tu-correo@ejemplo.com', // Cambia esto por tu email real
+        to: 'jercharhd.10@gmail.com', // Cambia esto por tu email real
         subject: '⚠️ ALERTA: Niveles Críticos detectados',
         text: `Se han detectado niveles altos en el sensor.\n\nTemperatura: ${temperature}°C\nHumedad: ${humidity}%\nFecha: ${new Date().toLocaleString()}`
       };
