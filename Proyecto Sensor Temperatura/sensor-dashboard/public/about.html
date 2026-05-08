@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Acerca de - IoT Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0d1117; color: #e6edf3; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 40px; max-width: 600px; text-align: center; }
+    h1 { color: #58a6ff; margin-bottom: 20px; }
+    p { color: #8b949e; line-height: 1.6; margin-bottom: 20px; }
+    .btn-back { padding: 10px 20px; background: #21262d; border: 1px solid #30363d; border-radius: 8px; color: #e6edf3; text-decoration: none; display: inline-block; transition: 0.2s; }
+    .btn-back:hover { background: #30363d; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Acerca del Proyecto</h1>
+    <p>Este sistema IoT fue desarrollado para monitorear en tiempo real la temperatura y humedad utilizando un microcontrolador ESP8266 y un sensor DHT22. Permite comunicación bidireccional (Read and Push) para accionar un LED desde un panel web.</p>
+    <p><strong>Tecnologías utilizadas:</strong> Node.js, Express, MongoDB (NoSQL), Plotly.js y JWT para seguridad.</p>
+    <a href="/dashboard" class="btn-back">Volver al Dashboard</a>
+  </div>
+</body>
+</html>
